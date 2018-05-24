@@ -140,16 +140,22 @@ class BaseEndpointTestCase(unittest.TestCase):
         'name': 'Graydon Creed',
         'email': 'graydon@friendsofhumanity.com',
         'phone': '5555555555',
-        'bank': {
+        'destinations': [{
+            'type': 'bank_account',
             'account_number': '123456789012345673',
-            'account_holder': 'Friends of Humanity'
-        }
+            'account_holder_name': 'Friends of Humanity'
+        }]
     }
 
-    payout_method_object = {
-        'type': 'bank_transfer_payout_method',
-        'account_number': '123456789012345673',
-        'account_holder': 'Friends of Humanity'
+    destination_object = {
+        'type': 'bank_account',
+        'account_number': '072225008217746674',
+        'account_holder_name': 'J D Radcorp'
+    }
+
+    transfer_object = {
+        'amount': 50000,
+        'currency': 'MXN'
     }
 
     order_object = {

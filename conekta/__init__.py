@@ -248,11 +248,6 @@ class _FindableResource(_Resource):
     def get(cls, _id, api_key=None):
         cls.find(_id, api_key)
 
-class Card(_UpdatableResource, _DeletableResource):
-
-    def instance_url(self):
-        return "customers/%s/cards/%s" % (self.parent.id, self.id)
-
 class Charge(_CreatableResource, _FindableResource):
 
     def instance_url(self):
@@ -446,26 +441,26 @@ class Payee(_CreatableResource, _UpdatableResource, _DeletableResource, _Findabl
         super(Payee, self).__init__(*args, **kwargs)
 
         attributes = args[0]
-        self.payout_methods = []
-        if 'payout_methods' in attributes.keys():
-            for payout_method in attributes['payout_methods']:
-                payout_method['parent'] = self
-                self.payout_methods.append(PayoutMethod(payout_method))
+        self.destinations = []
+        if 'destinations' in attributes.keys():
+            for destination in attributes['destinations']:
+                destination['parent'] = self
+                self.destinations.append(Destination(destination))
 
-    def createPayoutMethod(self, params, api_key=None):
-        payout_method = PayoutMethod(PayoutMethod.load_url("%s/payout_methods" % self.instance_url(), 'POST', params, api_key=api_key))
-        payout_method.parent = self
-        self.payout_methods.append(payout_method)
-        return payout_method
+    def createDestination(self, params, api_key=None):
+        destination = Destination(Destination.load_url("%s/destinations" % self.instance_url(), 'POST', params, api_key=api_key))
+        destination.parent = self
+        self.destinations.append(destination)
+        return destination
 
     @property
-    def default_payout_method(self):
-        if self.default_payout_method_id:
-            return [payout_method for payout_method in self.payout_methods if payout_method.id == self.default_payout_method_id][0]
+    def default_destination(self):
+        if self.default_destination_id:
+            return [destination for destination in self.destinations if destination.id == self.default_destination_id][0]
         else:
             return None
 
-class Payout(_CreatableResource, _FindableResource): pass
+class Transfer(_CreatableResource, _FindableResource): pass
 class Pagination(_CreatableResource):
     def next(self):
         if not hasattr(self, 'next_page_url'):
@@ -488,10 +483,10 @@ class Pagination(_CreatableResource):
             query[key_and_param[0]] = key_and_param[1]
         return self.class_name.where(query)
 
-class PayoutMethod(_UpdatableResource, _DeletableResource):
+class Destination(_UpdatableResource, _DeletableResource):
 
     def instance_url(self):
-        return "payees/%s/payout_methods/%s" % (self.parent.id, self.id)
+        return "payees/%s/destinations" % (self.parent.id)
 
 class Plan(_CreatableResource, _UpdatableResource, _DeletableResource, _FindableResource): pass
 
