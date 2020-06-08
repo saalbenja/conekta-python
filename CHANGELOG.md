@@ -1,3 +1,8 @@
+## [2.6.0](https://github.com/conekta/conekta-python/releases/tag/v2.6.0) - 2020-06-08
+### Change
+- Remove List.total attribute in favor of List.has_more attribute for performance
+  reasons
+
 ## [2.5.1](https://github.com/conekta/conekta-python/releases/tag/v2.5.1) - 2019-12-31
 ### Change
 - Adds message field for error object where it was previously missing
